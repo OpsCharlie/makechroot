@@ -27,7 +27,7 @@ ROOT="/var/chroot"
 
 
 # which commands need to be available in the chroot
-# git needs: git sh basename uname tr pager
+# git needs: git sh basename uname tr pager ssh
 # push over https: /usr/lib/git-core/git-remote-https
 CMD=$(which ls locale cat echo bash tar file touch vi vim cp mv /usr/bin/rm id mkdir grep sed less)
 
@@ -102,16 +102,10 @@ if [ -f /lib64/ld-linux-x86-64.so.2 ]; then
     cp --parents /lib64/ld-linux-x86-64.so.2 "$CHROOT" 2>/dev/null
 fi
 
-# ARCH i386
-if [ -f  /lib/ld-linux.so.2 ]; then
-    cp --parents /lib/ld-linux.so.2 "$CHROOT" 2>/dev/null
-fi
-
-
 
 #files for dns/hosts resolving
 for F in libnss_files.so.2 libnss_dns.so.2; do
-    CP=$(dirname "$(locate $F | grep x86)")
+    CP="/lib/x86_64-linux-gnu"
     mkdir -p "$CHROOT/$CP/"
     cp --parents "$CP"/"$F" "$CHROOT"
 done
